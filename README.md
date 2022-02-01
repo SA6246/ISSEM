@@ -2,7 +2,7 @@
 #### Professor S. Raj Rajagopalan, Ph.D.
 © Steven Angulo, Christopher Garcia, Saibala Lakkaraju, Sreya	Lyubarskiy
 
-![This is an image](https://myoctocat.com/assets/images/base-octocat.svg)
+![canvas](https://user-images.githubusercontent.com/81187590/152055487-298e000f-ecc2-4d4f-b913-9f96075baa4b.png)
 
 For labs in this class, we will be using Jupyter notebooks which is a useful application for writing and
 compiling Python code. It contains all the necessary libraries and packages which can be used for
