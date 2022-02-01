@@ -26,22 +26,25 @@ Post installation, register into the anaconda to access Jupyter notebook.
 members and their net ids under the heading.
 
 5) Create a new cell (type- code) and write the following code snippet and run the cell.
+```
 Group = "<Your Group Number>"
 Course = "ISSEM"
 Lab = “Lab1"
 print("Group:"+Group, Lab, "Course:"+Course)
 
 6) Create a new cell, define the following variables in it:
-
+```
+```
 X=7
 Y = 'ISSEM'
 Z = ["red", "blue", "green"]
 Find the data type of each using print(type(variable)) command. Also write data type of
 each, using comments in the same cell.
-
+```
 7) This is the question from the Python assessment. What operation following piece of code is
 doing. Use comments to explain the relevant parts of the code.
-  
+
+```
 str="The quick brown fox jumps over the lazy dog"
 arr = str.split(" ")
 temp=[]
@@ -52,7 +55,7 @@ arr[1]= arr[len(arr)-1]
 arr[len(arr)-2] = temp[0]
 arr[len(arr)-1] = temp[1]
 str=' '.join(arr)
-
+```
 8) Write the following function in the next cell.
 ```
 def dummy(var):
