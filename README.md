@@ -1,3 +1,4 @@
+![tandon_long_color](https://user-images.githubusercontent.com/81187590/152059832-bee13e82-26af-443f-b461-66406a5c17bf.jpg)
 # New York University Tandon School of Engineering
 # CS GY6803-CF01/02: Practical Cybersecurity for Systems Engineers
 # Spring 2022
