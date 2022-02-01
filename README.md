@@ -29,19 +29,19 @@ pressures will be explored. Case studies and best practice examples will be used
 ---------------
 By the end of the course, students will be able to
 
-● Describe the overall structure of the product lifecycle and the role of cybersecurity in the
-lifecycle
+  ● Describe the overall structure of the product lifecycle and the role of cybersecurity in the
+  lifecycle
 
-● Summarize the cybersecurity best practices that apply to each phase of the lifecycle
+  ● Summarize the cybersecurity best practices that apply to each phase of the lifecycle
 
-● Enumerate the roles and responsibilities of Cybersecurity architects and the various
-mechanisms for discharging those responsibilities
+  ● Enumerate the roles and responsibilities of Cybersecurity architects and the various
+  mechanisms for discharging those responsibilities
 
-● Develop the skills to guide the security in product development and operation
+  ● Develop the skills to guide the security in product development and operation
 
-● Evaluate new technologies and solutions in the context of product cybersecurity
+  ● Evaluate new technologies and solutions in the context of product cybersecurity
 
-● Analyze and evaluate the risks associated with a product with respect to its cybersecurity
+  ● Analyze and evaluate the risks associated with a product with respect to its cybersecurity
 gap
 
 ## Course Structure 
