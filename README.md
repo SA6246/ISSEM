@@ -1,3 +1,4 @@
+![tandon_long_color](https://user-images.githubusercontent.com/81187590/152056062-262324db-655e-4951-96ea-ca62faf4eea5.jpg)
 # CS-GY6803- ISSEM Information Systems Security Engineering and Management Spring Semester 2022 Lab1
 #### Professor S. Raj Rajagopalan, Ph.D.
 © Steven Angulo, Christopher Garcia, Saibala Lakkaraju, Sreya	Lyubarskiy
