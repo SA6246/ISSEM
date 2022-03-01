@@ -53,13 +53,14 @@ class SmartNetworkThermometer (threading.Thread) :
         return self.curTemperature
 
     def processCommands(self, msg, addr) :
-        print("here")
+        
         cmds = msg.split(';')
         for c in cmds :
             cs = c.split(' ')
             if len(cs) == 2 : #should be either AUTH or LOGOUT
                 if cs[0] == "AUTH":
                     if cs[1] == "!Q#E%T&U8i6y4r2w" :
+                        print("her1")
                         self.tokens.append(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(16)))
                         self.serverSocket.sendto(self.tokens[-1].encode("utf-8"), addr)
                         #print (self.tokens[-1])
