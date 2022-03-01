@@ -53,6 +53,7 @@ class SmartNetworkThermometer (threading.Thread) :
         return self.curTemperature
 
     def processCommands(self, msg, addr) :
+        print("here")
         cmds = msg.split(';')
         for c in cmds :
             cs = c.split(' ')
