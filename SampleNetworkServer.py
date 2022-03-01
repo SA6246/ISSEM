@@ -168,6 +168,7 @@ class SimpleClient :
         self.incLn.set_data(range(30), self.incTemps)
         return self.incLn,
 
+    """
 UPDATE_PERIOD = .05 #in seconds
 SIMULATION_STEP = .1 #in seconds
 
@@ -194,4 +195,4 @@ sc = SimpleClient(bobThermo, incThermo)
 
 plt.grid()
 plt.show()
-
+"""
