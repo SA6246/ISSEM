@@ -47,8 +47,6 @@ class SimpleNetworkClient :
         return (float(m))
 
     def authenticate(self, p, pw) :
-        print(p)
-        print(pw)
         s = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
         s.sendto(b"AUTH %s" % pw, ("127.0.0.1", p))
         msg, addr = s.recvfrom(1024)
