@@ -56,7 +56,8 @@ class SimpleNetworkClient :
         self.updateTime()
         if self.infToken is None : #not yet authenticated
             self.infToken = self.authenticate(self.infPort, (config('PASSWORD')).encode("utf-8"))
-
+            #Here we can use our .env file to pass in the value of our password, in a hidden way.
+            
         self.infTemps.append(self.getTemperatureFromPort(self.infPort, self.infToken)-273)
         #self.infTemps.append(self.infTemps[-1] + 1)
         self.infTemps = self.infTemps[-30:]
@@ -67,6 +68,7 @@ class SimpleNetworkClient :
         self.updateTime()
         if self.incToken is None : #not yet authenticated
             self.incToken = self.authenticate(self.incPort, (config('PASSWORD')).encode("utf-8"))
+            #Here we can use our .env file to pass in the value of our password, in a hidden way.
 
         self.incTemps.append(self.getTemperatureFromPort(self.incPort, self.incToken)-273)
         #self.incTemps.append(self.incTemps[-1] + 1)
