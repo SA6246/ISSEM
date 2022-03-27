@@ -10,6 +10,7 @@ import os
 import errno
 import random
 import string
+from decouple import config
 
 class SmartNetworkThermometer (threading.Thread) :
     open_cmds = ["AUTH", "LOGOUT"]
