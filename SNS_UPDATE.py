@@ -61,14 +61,14 @@ class SmartNetworkThermometer (threading.Thread) :
                 if cs[0] == "AUTH":
                     if cs[1] == "!Q#E%T&U8i6y4r2w" :
                         if(len(self.__tokens) < 1):
-                            self.tokens.append(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(16)))
-                            self.serverSocket.sendto(self.tokens[-1].encode("utf-8"), addr)
+                            self.__tokens.append(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(16)))
+                            self.serverSocket.sendto(self.__tokens[-1].encode("utf-8"), addr)
                         else:
                           return print("Only 1 Token Per Simulation Allowed")
-                        #print (self.tokens[-1])
+                        #print (self.__tokens[-1])
                 elif cs[0] == "LOGOUT":
-                    if cs[1] in self.tokens :
-                        self.tokens.remove(cs[1])
+                    if cs[1] in self.__tokens :
+                        self.__tokens.remove(cs[1])
                 else : #unknown command
                     self.serverSocket.sendto(b"Invalid Command\n", addr)
             elif c == "SET_DEGF" :
@@ -95,7 +95,7 @@ class SmartNetworkThermometer (threading.Thread) :
                     semi = msg.find(';')
                     if semi != -1 : #if we found the semicolon
                         #print (msg)
-                        if msg[:semi] in self.tokens : #if its a valid token
+                        if msg[:semi] in self.__tokens : #if its a valid token
                             self.processCommands(msg[semi+1:], addr)
                         else :
                             self.serverSocket.sendto(b"Bad Token\n", addr)
