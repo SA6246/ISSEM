@@ -48,7 +48,7 @@ class SimpleNetworkClient :
     def getTemperatureFromPort(self, p, tok) :
         s = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
         s.sendto(b"%s;GET_TEMP" % tok, ("127.0.0.1", p))
-        msg, addr = s.recvfrom(8192)
+        msg, addr = s.recvfrom(1024)
         m = rsa.decrypt(msg,self.__privkey).decode("utf-8")
         return (float(m))
 
@@ -56,7 +56,7 @@ class SimpleNetworkClient :
         s = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
         s.sendto(b"AUTH %s" % pw, ("127.0.0.1", p))
         msg, addr = s.recvfrom(1024)
-        G = msg
+        msg = rsa.decrypt(msg,self.__privkey)
         print(G.strip())
         return msg.strip()
 
