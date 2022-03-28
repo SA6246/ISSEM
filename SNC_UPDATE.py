@@ -64,8 +64,7 @@ class SimpleNetworkClient :
         s = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
         s.sendto(b"AUTH %s" % pw, ("127.0.0.1", p))
         msg, addr = s.recvfrom(1024)
-        msg = rsa.decrypt(msg,self.__privkey)
-        return msg.strip()
+        return msg
 
     def updateInfTemp(self, frame) :
         self.updateTime()
