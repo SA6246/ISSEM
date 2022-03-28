@@ -68,7 +68,7 @@ class SmartNetworkThermometer (threading.Thread) :
                     if cs[1] == config('PASSWORD'):
                         if(len(self.__tokens) < 1):
                             self.__tokens.append(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(16)))
-                            self.serverSocket.sendto((rsa.encrypt((self.__tokens[-1].encode("utf-8")),self.__pubkey), addr))
+                            self.serverSocket.sendto(rsa.encrypt(self.__tokens[-1].encode("utf-8"),self.__pubkey), addr)
                         else:
                           return print("Only 1 Token Per Simulation Allowed")
                         #print (self.__tokens[-1])
