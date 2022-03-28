@@ -57,7 +57,6 @@ class SimpleNetworkClient :
         s.sendto(b"AUTH %s" % pw, ("127.0.0.1", p))
         msg, addr = s.recvfrom(1024)
         msg = rsa.decrypt(msg,self.__privkey)
-        print(G.strip())
         return msg.strip()
 
     def updateInfTemp(self, frame) :
