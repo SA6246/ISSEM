@@ -19,9 +19,16 @@ class SmartNetworkThermometer (threading.Thread) :
     prot_cmds = ["SET_DEGF", "SET_DEGC", "SET_DEGK", "GET_TEMP", "UPDATE_TEMP"]
 
     def __init__ (self, source, updatePeriod, port) :
+        
         with open('public.pem') as privatefile:
             g = privatefile.read()
             self.__pubkey = rsa.PublicKey.load_pkcs1(g)
+                
+        with open('private.pem') as privatefile:
+            p = privatefile.read()
+            self.__privkey = rsa.PrivateKey.load_pkcs1(p)
+		        
+                
         threading.Thread.__init__(self, daemon = True) 
         #set daemon to be true, so it doesn't block program from exiting
         self.source = source
@@ -94,8 +101,16 @@ class SmartNetworkThermometer (threading.Thread) :
         while True : 
             try :
                 msg, addr = self.serverSocket.recvfrom(1024)
-                msg = msg.decode("utf-8").strip()
-                cmds = msg.split(' ')
+                
+                if(len(msg) > 50): # Check for encrypt payload size
+                    msg = rsa.decrypt(msg,self.__privkey) 
+                    msg = msg.decode("utf-8").strip()
+                    cmds = msg.split(' ')
+
+                else:   #not encrypt info to server
+                    msg = msg.decode("utf-8").strip()
+                    cmds = msg.split(' ')
+    
                 if len(cmds) == 1 : # protected commands case
                     semi = msg.find(';')
                     if semi != -1 : #if we found the semicolon
