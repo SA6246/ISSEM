@@ -50,12 +50,15 @@ class SimpleNetworkClient :
         s = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
         s.sendto(b"AUTH %s" % pw, ("127.0.0.1", p))
         msg, addr = s.recvfrom(1024)
+        G = msg
+        print(G.strip())
         return msg.strip()
 
     def updateInfTemp(self, frame) :
         self.updateTime()
         if self.__infToken is None : #not yet authenticated
             self.__infToken = self.authenticate(self.infPort, (config('PASSWORD')).encode("utf-8"))
+            #self.__infToken = rsa.decrypt((self.authenticate(self.infPort, (config('PASSWORD')).encode("utf-8"))),config('PUBLIC'))
             #Here we can use our .env file to pass in the value of our password, in a hidden way.
             
         self.infTemps.append(self.getTemperatureFromPort(self.infPort, self.__infToken)-273)
@@ -68,6 +71,7 @@ class SimpleNetworkClient :
         self.updateTime()
         if self.__incToken is None : #not yet authenticated
             self.__incToken = self.authenticate(self.incPort, (config('PASSWORD')).encode("utf-8"))
+            #self.__incToken = rsa.decrypt((self.authenticate(self.incPort, (config('PASSWORD')).encode("utf-8"))),config('PRIVATE'))
             #Here we can use our .env file to pass in the value of our password, in a hidden way.
 
         self.incTemps.append(self.getTemperatureFromPort(self.incPort, self.__incToken)-273)
