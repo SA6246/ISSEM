@@ -59,10 +59,6 @@ class SmartNetworkThermometer (threading.Thread) :
         return self.curTemperature
 
     def processCommands(self, msg, addr) :
-        with open('public.pem') as privatefile:
-            g = privatefile.read()
-            self.__pubkey = rsa.PublicKey.load_pkcs1(g)
-        
         cmds = msg.split(';')
         for c in cmds :
             cs = c.split(' ')
