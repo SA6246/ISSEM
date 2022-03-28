@@ -19,6 +19,9 @@ class SmartNetworkThermometer (threading.Thread) :
     prot_cmds = ["SET_DEGF", "SET_DEGC", "SET_DEGK", "GET_TEMP", "UPDATE_TEMP"]
 
     def __init__ (self, source, updatePeriod, port) :
+        with open('public.pem') as privatefile:
+            g = privatefile.read()
+            self.__pubkey = rsa.PublicKey.load_pkcs1(g)
         threading.Thread.__init__(self, daemon = True) 
         #set daemon to be true, so it doesn't block program from exiting
         self.source = source
