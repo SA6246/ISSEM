@@ -14,6 +14,11 @@ class SimpleNetworkClient :
             p = privatefile.read()
             self.__privkey = rsa.PrivateKey.load_pkcs1(p)
             
+        with open('public.pem') as privatefile:
+            print("here")
+            g = privatefile.read()
+            self.__pubkey = rsa.PublicKey.load_pkcs1(g)
+            
         self.fig, self.ax = plt.subplots()
         now = time.time()
         self.lastTime = now
@@ -47,7 +52,10 @@ class SimpleNetworkClient :
 
     def getTemperatureFromPort(self, p, tok) :
         s = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-        s.sendto(b"%s;GET_TEMP" % tok, ("127.0.0.1", p))
+        EncodedString = b"%s;GET_TEMP"% tok
+        NewEncodedString= rsa.encrypt(EncodedString, self.__pubkey)
+        s.sendto(NewEncodedString, ("127.0.0.1", p))
+        #s.sendto(b"%s;GET_TEMP" % tok, ("127.0.0.1", p))
         msg, addr = s.recvfrom(1024)
         m = msg.decode("utf-8")
         return (float(m))
@@ -63,6 +71,7 @@ class SimpleNetworkClient :
         self.updateTime()
         if self.__infToken is None : #not yet authenticated
             self.__infToken = self.authenticate(self.infPort, config('PASSWORD').encode('utf-8'))
+            self.__infToken = rsa.decrypt(self.__infToken,self.__privkey) 
             #self.__infToken = rsa.decrypt((self.authenticate(self.infPort, (config('PASSWORD')).encode("utf-8"))),config('PUBLIC'))
             #Here we can use our .env file to pass in the value of our password, in a hidden way.
             
@@ -76,6 +85,7 @@ class SimpleNetworkClient :
         self.updateTime()
         if self.__incToken is None : #not yet authenticated
             self.__incToken = self.authenticate(self.incPort, config('PASSWORD').encode('utf-8'))
+            self.__incToken = rsa.decrypt(self.__incToken,self.__privkey)
             #self.__incToken = rsa.decrypt((self.authenticate(self.incPort, (config('PASSWORD')).encode("utf-8"))),config('PRIVATE'))
             #Here we can use our .env file to pass in the value of our password, in a hidden way.
 
