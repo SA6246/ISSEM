@@ -62,7 +62,7 @@ class SimpleNetworkClient :
     def updateInfTemp(self, frame) :
         self.updateTime()
         if self.__infToken is None : #not yet authenticated
-            self.__infToken = self.authenticate(self.infPort, self.__privkey ).encode("utf-8"))
+            self.__infToken = self.authenticate(self.infPort, self.__privkey)
             #self.__infToken = rsa.decrypt((self.authenticate(self.infPort, (config('PASSWORD')).encode("utf-8"))),config('PUBLIC'))
             #Here we can use our .env file to pass in the value of our password, in a hidden way.
             
@@ -75,7 +75,7 @@ class SimpleNetworkClient :
     def updateIncTemp(self, frame) :
         self.updateTime()
         if self.__incToken is None : #not yet authenticated
-            self.__incToken = self.authenticate(self.incPort, self.__privkey ).encode("utf-8"))
+            self.__incToken = self.authenticate(self.incPort, self.__privkey)
             #self.__incToken = rsa.decrypt((self.authenticate(self.incPort, (config('PASSWORD')).encode("utf-8"))),config('PRIVATE'))
             #Here we can use our .env file to pass in the value of our password, in a hidden way.
 
