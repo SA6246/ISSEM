@@ -49,7 +49,7 @@ class SimpleNetworkClient :
         s = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
         s.sendto(b"%s;GET_TEMP" % tok, ("127.0.0.1", p))
         msg, addr = s.recvfrom(8192)
-        m = msg.decode("utf-8")
+        m = rsa.decrypt(msg,self.__privkey).decode("utf-8")
         return (float(m))
 
     def authenticate(self, p, pw) :
