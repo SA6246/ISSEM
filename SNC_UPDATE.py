@@ -5,6 +5,7 @@ import math
 import socket
 import os
 from decouple import config
+import rsa
 
 class SimpleNetworkClient :
     def __init__(self, port1, port2) :
