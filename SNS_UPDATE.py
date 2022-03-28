@@ -13,6 +13,7 @@ import string
 from decouple import config
 import rsa
 
+        
 class SmartNetworkThermometer (threading.Thread) :
     open_cmds = ["AUTH", "LOGOUT"]
     prot_cmds = ["SET_DEGF", "SET_DEGC", "SET_DEGK", "GET_TEMP", "UPDATE_TEMP"]
@@ -55,6 +56,9 @@ class SmartNetworkThermometer (threading.Thread) :
         return self.curTemperature
 
     def processCommands(self, msg, addr) :
+        with open('public.pem') as privatefile:
+            g = privatefile.read()
+            pubkey = rsa.PublicKey.load_pkcs1(g)
         
         cmds = msg.split(';')
         for c in cmds :
@@ -64,7 +68,7 @@ class SmartNetworkThermometer (threading.Thread) :
                     if cs[1] == config('PASSWORD'):
                         if(len(self.__tokens) < 1):
                             self.__tokens.append(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(16)))
-                            self.serverSocket.sendto((rsa.encrypt(self.__tokens[-1].encode("utf-8"),config('PUBLIC')), addr))
+                            self.serverSocket.sendto((rsa.encrypt(self.__tokens[-1].encode("utf-8"),pubkey), addr))
                         else:
                           return print("Only 1 Token Per Simulation Allowed")
                         #print (self.__tokens[-1])
