@@ -12,6 +12,7 @@ import random
 import string
 from decouple import config
 import rsa
+import ssl
 
         
 class SmartNetworkThermometer (threading.Thread) :
@@ -37,8 +38,21 @@ class SmartNetworkThermometer (threading.Thread) :
         self.updateTemperature()
         self.__tokens = [] #privatize the token list so object can't reference it directly.
 
-        self.serverSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+         context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER) #SSL
+        context.load_cert_chain('cert.pem', 'private.key') #SSL
+        self.serverSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM) #SSL
         self.serverSocket.bind(("127.0.0.1", port))
+
+        self.serverSocket.listen() #SSL
+        self.serverSocket = context.wrap_socket(self.serverSocket, server_side=True
+	
+	
+	
+	#self.serverSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+        #self.serverSocket.bind(("127.0.0.1", port))
+	
+	
+	
         fcntl.fcntl(self.serverSocket, fcntl.F_SETFL, os.O_NONBLOCK)
 
         self.deg = "K"
@@ -65,7 +79,7 @@ class SmartNetworkThermometer (threading.Thread) :
 
         return self.curTemperature
 
-    def processCommands(self, msg, addr) :
+    def processCommands(self, msg, connext) : #SSL
         cmds = msg.split(';')
         for c in cmds :
             cs = c.split(' ')
@@ -74,7 +88,10 @@ class SmartNetworkThermometer (threading.Thread) :
                     if cs[1] == config('PASSWORD'):
                         if(len(self.__tokens) < 1):
                             self.__tokens.append(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(16)))
-                            self.serverSocket.sendto(rsa.encrypt(self.__tokens[-1].encode("utf-8"),self.__pubkey), addr)
+			    data = rsa.encrypt(self.__tokens[-1].encode("utf-8"),self.__pubkey)
+                            connext.send(data)
+						
+			    #self.serverSocket.sendto(rsa.encrypt(self.__tokens[-1].encode("utf-8"),self.__pubkey), addr)
                         else:
                           return print("Only 1 Token Per Simulation Allowed")
                         #print (self.__tokens[-1])
@@ -100,8 +117,11 @@ class SmartNetworkThermometer (threading.Thread) :
     def run(self) : #the running function
         while True : 
             try :
-                msg, addr = self.serverSocket.recvfrom(1024)
-                
+                #msg, addr = self.serverSocket.recvfrom(1024)
+                connext, addr = self.serverSocket.accept() #KD
+                msg = conn.recv(1024) #KD
+                msg = msg.decode().strip()
+						
                 if(len(msg) > 50): # Check for encrypt payload size
                     msg = rsa.decrypt(msg,self.__privkey) 
                     msg = msg.decode("utf-8").strip()
@@ -110,25 +130,30 @@ class SmartNetworkThermometer (threading.Thread) :
                 else:   #not encrypt info to server
                     msg = msg.decode("utf-8").strip()
                     cmds = msg.split(' ')
-    
+    		
                 if len(cmds) == 1 : # protected commands case
                     semi = msg.find(';')
                     if semi != -1 : #if we found the semicolon
                         #print (msg)
                         if msg[:semi] in self.__tokens : #if its a valid token
-                            self.processCommands(msg[semi+1:], addr)
+                            self.processCommands(msg[semi+1:], connext)
                         else :
-                            self.serverSocket.sendto(b"Bad Token\n", addr)
+			    data = "Incorrect Command\n"
+                            connext.send(data.encode())
                     else :
-                            self.serverSocket.sendto(b"Bad Command\n", addr)
+                            data = "Incorrect Command\n"
+                            connext.send(data.encode())
                 elif len(cmds) == 2 :
                     if cmds[0] in self.open_cmds : #if its AUTH or LOGOUT
-                        self.processCommands(msg, addr) 
+                        self.processCommands(msg, connext) 
                     else :
-                        self.serverSocket.sendto(b"Authenticate First\n", addr)
+			data = "Authenticate First\n"
+                        connext.send(data.encode())
                 else :
                     # otherwise bad command
-                    self.serverSocket.sendto(b"Bad Command\n", addr)
+                    #self.serverSocket.sendto(b"Bad Command\n", connext)
+		    data = "Incorrect Command\n"
+                    connext.send(data.encode()
     
             except IOError as e :
                 if e.errno == errno.EWOULDBLOCK :
