@@ -51,19 +51,40 @@ class SimpleNetworkClient :
             plt.title(time.strftime("%A, %Y-%m-%d", time.localtime(now)))
 
     def getTemperatureFromPort(self, p, tok) :
-        s = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+        context.load_verify_locations('cert.pem')
+        s = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
         EncodedString = b"%s;GET_TEMP"% tok
         NewEncodedString= rsa.encrypt(EncodedString, self.__pubkey)
-        s.sendto(NewEncodedString, ("127.0.0.1", p))
-        #s.sendto(b"%s;GET_TEMP" % tok, ("127.0.0.1", p))
-        msg, addr = s.recvfrom(1024)
-        m = msg.decode("utf-8")
-        return (float(m))
+        
+        host, port = '127.0.0.1', p
+        secureSocket = context.wrap_socket(s, server_hostname=host)
+        secureSocket.connect((host, port))
+        
+       
+        secureSocket.send(NewEncodedString)
+        msg = secureSocket.recv(2048)
+        m = msg.decode()
+        
+        
+        
+        
+        
+    
 
     def authenticate(self, p, pw) :
-        s = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-        s.sendto(b"AUTH %s" % pw, ("127.0.0.1", p))
-        msg, addr = s.recvfrom(1024)
+        #SSL
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+        context.load_verify_locations('cert.pem')
+        s = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
+        host, port = '127.0.0.1', p
+        secureSocket = context.wrap_socket(s, server_hostname=host)
+        secureSocket.connect((host, port))
+        data = "AUTH %s" % pw
+        secureSocket.send(data.encode())
+        #
+        msg = secureSocket.recv(2048)
+        #msg = msg.decode()
         return msg
 
     def updateInfTemp(self, frame) :
